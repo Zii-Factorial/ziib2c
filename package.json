@@ -16,16 +16,16 @@
     "prepare": "husky"
   },
   "lint-staged": {
-      "resources/js/**/*.{ts,tsx}": [
-          "eslint --fix --no-ignore",
-          "prettier --write"
-      ],
-      "app/**/*.php": [
-          "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-unsupported-php-version"
-      ],
-      "resources/css/**/*.css": [
-          "prettier --write"
-      ]
+    "resources/js/**/*.{ts,tsx}": [
+      "eslint --fix --no-ignore",
+      "prettier --write"
+    ],
+    "app/**/*.php": [
+      "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-unsupported-php-version"
+    ],
+    "resources/css/**/*.css": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -94,5 +94,6 @@
   },
   "resolutions": {
     "eslint": "^10.2.1"
-  }
+  },
+  "packageManager": "yarn@4.14.1"
 }
