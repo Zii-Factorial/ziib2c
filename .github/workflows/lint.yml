@@ -1,18 +1,10 @@
-name: linter
+name: Linter
 
 on:
   push:
-    branches:
-      - develop
-      - main
-      - master
-      - workos
+    branches: [master, develop]
   pull_request:
-    branches:
-      - develop
-      - main
-      - master
-      - workos
+    branches: [master, develop]
 
 permissions:
   contents: write
@@ -20,30 +12,39 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
+          tools: composer:v2
 
-      - name: Install Dependencies
-        run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm install
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-      - name: Run Pint
-        run: composer lint
+      - name: Enable Corepack (Yarn)
+        run: corepack enable && corepack prepare yarn@stable --activate
 
-      - name: Format Frontend
-        run: npm run format
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Lint Frontend
-        run: npm run lint
+      - name: Install Node dependencies
+        run: yarn install --immutable
 
-      # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v7
-      #   with:
-      #     commit_message: fix code style
-      #     commit_options: '--no-verify'
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php --allow-unsupported-php-version
+
+      - name: Prettier check
+        run: yarn format:check
+
+      - name: ESLint check
+        run: yarn lint:check
+
+      - name: TypeScript check
+        run: yarn types:check
