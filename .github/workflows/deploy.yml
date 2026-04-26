@@ -28,7 +28,7 @@ jobs:
             php artisan route:cache
             php artisan view:cache
             php artisan event:cache
-            yarn install --immutable
+            yarn install
             yarn build
             php artisan queue:restart
             sudo systemctl reload nginx

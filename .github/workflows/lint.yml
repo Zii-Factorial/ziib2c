@@ -35,7 +35,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Install Node dependencies
-        run: yarn install --immutable
+        run: yarn install
 
       - name: PHP CS Fixer
         run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php --allow-unsupported-php-version
