@@ -10,7 +10,7 @@
     "format:check": "prettier --check resources/",
     "lint": "eslint resources/js --ext .ts,.tsx",
     "lint:check": "eslint .",
-    "types:check": "tsc --noEmit",
+    "types:check": "php artisan wayfinder:generate --with-form --no-interaction && tsc --noEmit",
     "lint:fix": "eslint resources/js --ext .ts,.tsx --fix",
     "php:fix": "vendor/bin/php-cs-fixer fix",
     "prepare": "husky"
