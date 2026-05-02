@@ -39,7 +39,7 @@ jobs:
         run: yarn install
 
       - name: PHP CS Fixer
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php --allow-unsupported-php-version
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php --allow-unsupported-php-version=yes --sequential
 
       - name: Prettier check
         run: yarn format:check
