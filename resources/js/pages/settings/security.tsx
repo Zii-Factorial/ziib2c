@@ -9,7 +9,10 @@ import TwoFactorRecoveryCodes from '@/components/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/two-factor-setup-modal';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { passwordUpdateSchema } from '@/domains/settings/schema';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
+import type { ZodFormErrors } from '@/lib/zod-form';
+import { validateFormWithSchema } from '@/lib/zod-form';
 import { edit } from '@/routes/security';
 import { disable, enable } from '@/routes/two-factor';
 
@@ -39,6 +42,9 @@ export default function Security({
         errors,
     } = useTwoFactorAuth();
     const [showSetupModal, setShowSetupModal] = useState<boolean>(false);
+    const [validationErrors, setValidationErrors] = useState<
+        ZodFormErrors<typeof passwordUpdateSchema>
+    >({});
     const prevTwoFactorEnabled = useRef(twoFactorEnabled);
 
     useEffect(() => {
@@ -73,6 +79,13 @@ export default function Security({
                         'current_password',
                     ]}
                     resetOnSuccess
+                    onSubmit={(event) =>
+                        validateFormWithSchema(
+                            event,
+                            passwordUpdateSchema,
+                            setValidationErrors,
+                        )
+                    }
                     onError={(errors) => {
                         if (errors.password) {
                             passwordInput.current?.focus();
@@ -100,7 +113,12 @@ export default function Security({
                                     placeholder="Current password"
                                 />
 
-                                <InputError message={errors.current_password} />
+                                <InputError
+                                    message={
+                                        validationErrors.current_password ??
+                                        errors.current_password
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -115,7 +133,12 @@ export default function Security({
                                     placeholder="New password"
                                 />
 
-                                <InputError message={errors.password} />
+                                <InputError
+                                    message={
+                                        validationErrors.password ??
+                                        errors.password
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -132,7 +155,10 @@ export default function Security({
                                 />
 
                                 <InputError
-                                    message={errors.password_confirmation}
+                                    message={
+                                        validationErrors.password_confirmation ??
+                                        errors.password_confirmation
+                                    }
                                 />
                             </div>
 

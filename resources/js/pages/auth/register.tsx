@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { useState } from 'react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -6,10 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { registerSchema } from '@/domains/auth/schema';
+import type { ZodFormErrors } from '@/lib/zod-form';
+import { validateFormWithSchema } from '@/lib/zod-form';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
 export default function Register() {
+    const [validationErrors, setValidationErrors] = useState<
+        ZodFormErrors<typeof registerSchema>
+    >({});
+
     return (
         <>
             <Head title="Register" />
@@ -17,6 +25,13 @@ export default function Register() {
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
+                onSubmit={(event) =>
+                    validateFormWithSchema(
+                        event,
+                        registerSchema,
+                        setValidationErrors,
+                    )
+                }
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
@@ -35,7 +50,9 @@ export default function Register() {
                                     placeholder="Full name"
                                 />
                                 <InputError
-                                    message={errors.name}
+                                    message={
+                                        validationErrors.name ?? errors.name
+                                    }
                                     className="mt-2"
                                 />
                             </div>
@@ -51,7 +68,11 @@ export default function Register() {
                                     name="email"
                                     placeholder="email@example.com"
                                 />
-                                <InputError message={errors.email} />
+                                <InputError
+                                    message={
+                                        validationErrors.email ?? errors.email
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -64,7 +85,12 @@ export default function Register() {
                                     name="password"
                                     placeholder="Password"
                                 />
-                                <InputError message={errors.password} />
+                                <InputError
+                                    message={
+                                        validationErrors.password ??
+                                        errors.password
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -80,7 +106,10 @@ export default function Register() {
                                     placeholder="Confirm password"
                                 />
                                 <InputError
-                                    message={errors.password_confirmation}
+                                    message={
+                                        validationErrors.password_confirmation ??
+                                        errors.password_confirmation
+                                    }
                                 />
                             </div>
 
