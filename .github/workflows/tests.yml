@@ -43,9 +43,10 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
+          package-manager-cache: false
 
       - name: Enable Corepack (Yarn)
-        run: corepack enable && corepack prepare yarn@stable --activate
+        run: corepack enable && corepack prepare yarn@4.14.1 --activate
 
       - name: Cache Composer
         uses: actions/cache@v5
