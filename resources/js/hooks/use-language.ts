@@ -1,14 +1,13 @@
 import { router, usePage } from '@inertiajs/react';
 import { useSyncExternalStore } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
     PREFERENCE_STORAGE_KEYS,
     setPreferenceCookie,
 } from '@/config/preferences';
 import type { Language } from '@/domains/locale';
 import { DEFAULT_LANGUAGE, isLanguage } from '@/domains/locale';
-import i18n from '@/i18n';
 import type { TranslationKey } from '@/locales';
+import { messages } from '@/locales';
 import { addUrlDefault } from '@/wayfinder';
 
 const listeners = new Set<() => void>();
@@ -41,7 +40,6 @@ const applyLanguage = (language: Language): void => {
 
     document.documentElement.lang = language;
     addUrlDefault('locale', language);
-    void i18n.changeLanguage(language);
 };
 
 export function initializeLanguage(): void {
@@ -58,9 +56,12 @@ const syncLanguage = (language: Language): void => {
     notify();
 };
 
+const translate = (language: Language, key: TranslationKey): string => {
+    return messages[language][key] ?? messages[DEFAULT_LANGUAGE][key] ?? key;
+};
+
 export function useLanguage() {
     const { locale } = usePage().props;
-    const { t: translate } = useTranslation();
     const language = useSyncExternalStore<Language>(
         subscribe,
         () => {
@@ -90,7 +91,7 @@ export function useLanguage() {
         }
     };
 
-    const t = (key: TranslationKey): string => translate(key);
+    const t = (key: TranslationKey): string => translate(language, key);
 
     return { language, updateLanguage, t } as const;
 }

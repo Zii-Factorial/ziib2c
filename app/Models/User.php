@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Data\User\StoreData;
+use App\Data\User\UpdateData;
+use App\Data\User\UserData;
+use App\Traits\WithData;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -17,8 +21,16 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use WithData;
+
+    protected $dataClass = UserData::class;
+
+    protected $storeDataClass = StoreData::class;
+
+    protected $updateDataClass = UpdateData::class;
 
     /**
      * Get the attributes that should be cast.

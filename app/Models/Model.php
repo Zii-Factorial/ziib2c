@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model as EloquentModel;
+use App\Traits\WithData;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 
-abstract class Model extends EloquentModel
+abstract class Model extends BaseModel
 {
-    //
+    use WithData;
 }
