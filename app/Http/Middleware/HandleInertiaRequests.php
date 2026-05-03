@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -41,7 +42,37 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'locale' => [
+                'current' => LaravelLocalization::getCurrentLocale(),
+                'default' => LaravelLocalization::getDefaultLocale(),
+                'fallback' => config('app.fallback_locale'),
+                'supported' => collect(LaravelLocalization::getSupportedLocales())
+                    ->map(fn (array $properties, string $locale): array => [
+                        'code' => $locale,
+                        'name' => $properties['name'],
+                        'native' => $properties['native'],
+                        'url' => $this->localizedUrl($request, $locale),
+                    ])
+                    ->values(),
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    private function localizedUrl(Request $request, string $locale): string
+    {
+        $segments = $request->segments();
+        $supportedLocales = array_keys(LaravelLocalization::getSupportedLocales());
+
+        if (isset($segments[0]) && in_array($segments[0], $supportedLocales, true)) {
+            array_shift($segments);
+        }
+
+        array_unshift($segments, $locale);
+
+        $path = '/'.implode('/', $segments);
+        $query = $request->getQueryString();
+
+        return $query ? "{$path}?{$query}" : $path;
     }
 }
