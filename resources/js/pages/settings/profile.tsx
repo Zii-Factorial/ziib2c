@@ -1,4 +1,5 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
@@ -6,6 +7,9 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { profileSchema } from '@/domains/settings/schema';
+import type { ZodFormErrors } from '@/lib/zod-form';
+import { validateFormWithSchema } from '@/lib/zod-form';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 
@@ -17,6 +21,9 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage().props;
+    const [validationErrors, setValidationErrors] = useState<
+        ZodFormErrors<typeof profileSchema>
+    >({});
 
     return (
         <>
@@ -36,6 +43,13 @@ export default function Profile({
                     options={{
                         preserveScroll: true,
                     }}
+                    onSubmit={(event) =>
+                        validateFormWithSchema(
+                            event,
+                            profileSchema,
+                            setValidationErrors,
+                        )
+                    }
                     className="space-y-6"
                 >
                     {({ processing, errors }) => (
@@ -55,7 +69,9 @@ export default function Profile({
 
                                 <InputError
                                     className="mt-2"
-                                    message={errors.name}
+                                    message={
+                                        validationErrors.name ?? errors.name
+                                    }
                                 />
                             </div>
 
@@ -75,7 +91,9 @@ export default function Profile({
 
                                 <InputError
                                     className="mt-2"
-                                    message={errors.email}
+                                    message={
+                                        validationErrors.email ?? errors.email
+                                    }
                                 />
                             </div>
 

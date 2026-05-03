@@ -1,0 +1,32 @@
+export default {
+    'dashboard.title': 'Dashboard',
+    'dashboard.description': 'Track the most important activity in one place.',
+    'dashboard.revenue': 'Revenue',
+    'dashboard.orders': 'Orders',
+    'dashboard.customers': 'Customers',
+    'dashboard.conversion': 'Conversion',
+    'dashboard.quickView': 'Quick view',
+    'dashboard.activity': 'Recent activity',
+    'dashboard.performance': 'Performance',
+    'settings.appearance.title': 'Appearance settings',
+    'settings.appearance.description':
+        "Update your account's appearance settings",
+    'settings.language.title': 'Language',
+    'settings.language.description':
+        'Choose the display language for this browser.',
+    'settings.language.english': 'English',
+    'settings.language.khmer': 'Khmer',
+    'settings.theme.title': 'Theme',
+    'settings.theme.description':
+        'Change the accent color and component roundness.',
+    'settings.theme.color': 'Color',
+    'settings.theme.radius': 'Rounded',
+    'settings.theme.slate': 'Slate',
+    'settings.theme.blue': 'Blue',
+    'settings.theme.green': 'Green',
+    'settings.theme.rose': 'Rose',
+    'settings.theme.orange': 'Orange',
+    'settings.theme.compact': 'Compact',
+    'settings.theme.default': 'Default',
+    'settings.theme.rounded': 'Rounded',
+} as const;
