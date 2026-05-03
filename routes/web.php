@@ -6,7 +6,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localeCookieRedirect', 'localizationRedirect', 'localeViewPath'],
+    'middleware' => ['localizationRedirect', 'localeViewPath'],
 ], function (): void {
     Route::inertia('/', 'welcome', [
         'canRegister' => Features::enabled(Features::registration()),
