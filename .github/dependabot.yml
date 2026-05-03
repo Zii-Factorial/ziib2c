@@ -1,43 +1,85 @@
 version: 2
+
 updates:
+  # =========================
+  # PHP / Laravel (Composer)
+  # =========================
   - package-ecosystem: composer
     directory: /
     schedule:
       interval: daily
-      time: '00:00'
+      time: "00:00"
       timezone: Asia/Phnom_Penh
     open-pull-requests-limit: 10
     assignees:
       - visalnann
     commit-message:
       prefix: fix
-      prefix-development: chore
       include: scope
 
+  # =========================
+  # Frontend (Yarn + React + Inertia + shadcn)
+  # =========================
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: daily
-      time: '00:00'
+      time: "00:00"
       timezone: Asia/Phnom_Penh
     open-pull-requests-limit: 10
     assignees:
       - visalnann
+
+    versioning-strategy: lockfile-only
+
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+
+      inertia:
+        patterns:
+          - "@inertiajs/*"
+
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+
+      shadcn_ui:
+        patterns:
+          - "@radix-ui/*"
+          - "clsx"
+          - "class-variance-authority"
+          - "tailwind-merge"
+          - "lucide-react"
+
+      ui_utils:
+        patterns:
+          - "@headlessui/*"
+          - "@heroicons/*"
+
+      testing:
+        patterns:
+          - "vitest"
+          - "jest"
+          - "@testing-library/*"
+
     commit-message:
-      prefix: fix
-      prefix-development: chore
+      prefix: chore
       include: scope
 
+  # =========================
+  # GitHub Actions (CI/CD)
+  # =========================
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
-      time: '00:00'
+      time: "00:00"
       timezone: Asia/Phnom_Penh
-    open-pull-requests-limit: 10
-    assignees:
-      - visalnann
+    open-pull-requests-limit: 5
     commit-message:
-      prefix: fix
-      prefix-development: chore
+      prefix: chore
       include: scope
