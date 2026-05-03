@@ -27,7 +27,7 @@ jobs:
         run: corepack enable && corepack prepare yarn@4.14.1 --activate
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           package-manager-cache: false
